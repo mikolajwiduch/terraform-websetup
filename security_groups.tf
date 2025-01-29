@@ -116,3 +116,13 @@ resource "aws_security_group" "backend_security_group" {
     Name = var.backend_sg_name
   }
 }
+
+# Allow Self-ingress Backend (all traffic) after creating the SG
+resource "aws_security_group_rule" "backend_self_ingress" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.backend_security_group.id
+  source_security_group_id = aws_security_group.backend_security_group.id
+}
